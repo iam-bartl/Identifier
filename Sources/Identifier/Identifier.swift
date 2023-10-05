@@ -26,7 +26,7 @@ public extension Identifier {
             return false
         }
     }
-
+    
     var rawIdentifier: RawID {
         switch self {
         case .new(let raw): return raw
@@ -39,10 +39,18 @@ public extension Identifier where RawID == String {
     static func new() -> Identifier {
         .new(UUID().uuidString)
     }
+}
 
-    func isEqual(to string: String) -> Bool {
+public extension Identifier where RawID == UUID {
+    static func new() -> Identifier {
+        .new(UUID())
+    }
+}
+
+public extension Identifier where RawID: Equatable {
+    func isEqual(to raw: RawID) -> Bool {
         if case .existing(let identifier) = self {
-            return identifier == string
+            return identifier == raw
         }
         else {
             return false
